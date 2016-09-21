@@ -1,0 +1,16 @@
+This is a script I hacked together cause I wanted to display album art, but I don't have any local music on my computer.  It takes the currently playing song from mpd/mpc, searches google for a high quality image of the album art and downloads it to ~/music/artwork/$artist/$album, converts it to a thumbnail, and displays it using kyubiko's n30f.  It's not perfect, but it's fairly accurate for me, I'll try to update it and make the code cleaner.
+
+dependecies:
+kyubiko's n30f https://github.com/sdhand/n30f
+imagemagick
+python2.7
+mpd
+mpc
+
+I also edited Sandi1995's urban-fiesta https://github.com/Sandi1995/urban-fiesta
+
+how it works:
+basically will take the first google result for "artist name album name high quality", which is usually album art, and convert it with imagemagick to a 150 x 150 thumbnail.  then i use n30f to display the correct image, and the bash script loops over and over to check if there's a new song playing, and if there it it kills n30f, downloads new album art, and runs again.  If you already have the album art, it loads up again fairly quick, so once you've populated your artwork directory it should be pretty smooth. This is mainly for people who use somethign like mopidy spotify, and don't have local music on their computer, so they don't have any album art, or getting it would be a pain in the ass because they stream so much new music.
+
+it's not perfect, but it werks for me :)
+

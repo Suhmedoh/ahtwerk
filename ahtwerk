@@ -1,0 +1,46 @@
+#!/bin/bash
+#ahtwerk, simple script to grab artwork based on onodera's... thing.
+#uses Sandi1995's gFind.py https://github.com/Sandi1995/urban-fiesta/blob/master/gFind.py
+#editted to work with my system and download only the necessary files, and to take input from the commandline
+#lots of help from LambdaComplex
+music=/home/jiaxsun/music/albumart
+/usr/bin/mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
+/usr/bin/mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
+artist=$(/usr/bin/cat /home/jiaxsun/music/npartist)
+album=$(/usr/bin/cat /home/jiaxsun/music/npalbum)
+if [[ -d "$music/$artist/$album" ]];
+then
+	/home/jiaxsun/.local/bin/n30f -p -x 1770 -y 910 "$music/$artist/$album/cover.png" &
+	while true;
+	do
+		/usr/bin/mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
+		/usr/bin/mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
+		artist=$(/usr/bin/cat /home/jiaxsun/music/npartist)
+		album=$(/usr/bin/cat /home/jiaxsun/music/npalbum)
+		current=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*' | head -n 1)
+		echo "$current    " "$music/$artist/$album/cover.png"
+		if [[ "$current" != "$music/$artist/$album/cover.png" ]]; then
+			pkill n30f
+			exec ahtwerk
+		fi
+		sleep 1
+	done
+else
+	/home/jiaxsun/.local/bin/goimg.py "$album" "$artist"
+	convert -thumbnail 150 "$music/$artist/$album/cover.*" "$music/$artist/$album/cover.png"
+	/home/jiaxsun/.local/bin/n30f -p -x 1770 -y 910 "$music/$artist/$album/cover.png"&
+	while true; do
+		/usr/bin/mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
+		/usr/bin/mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
+		artist=$(/usr/bin/cat /home/jiaxsun/music/npartist)
+		album=$(/usr/bin/cat /home/jiaxsun/music/npalbum)
+		current=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*' | head -n 1)
+		echo "$current    " "$music/$artist/$album/cover.png"
+		if [[ "$current" != "$music/$artist/$album/cover.png" ]]; then
+			echo "new song"
+			pkill n30f
+			exec ahtwerk
+		fi
+		sleep 1
+	done
+fi 
