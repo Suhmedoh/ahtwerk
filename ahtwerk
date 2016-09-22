@@ -4,21 +4,26 @@
 #editted to work with my system and download only the necessary files, and to take input from the commandline
 #lots of help from LambdaComplex
 music=/home/jiaxsun/music/albumart
-/usr/bin/mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
-/usr/bin/mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
-artist=$(/usr/bin/cat /home/jiaxsun/music/npartist)
-album=$(/usr/bin/cat /home/jiaxsun/music/npalbum)
-if [[ -d "$music/$artist/$album" ]];
+
+#grab the now playing information, write it into files(im sure there's a more efffient way to do this)
+mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
+mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
+artist=$(cat /home/jiaxsun/music/npartist)
+album=$(cat /home/jiaxsun/music/npalbum)
+mediabar
+#check if a properly made cover art exists for the now playing
+if [[ -e "$music/$artist/$album/cover.png" ]];
 then
-	/home/jiaxsun/.local/bin/n30f -p -x 1770 -y 910 "$music/$artist/$album/cover.png" &
+	#use n30f to display already discovered cover art
+	n30f -p -x 1765 -y 905 "$music/$artist/$album/cover.png" &
+	#this loop repeatedly checks if the song has changed, and when it does, it kills n30f and restarts ahtwerk
 	while true;
 	do
-		/usr/bin/mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
-		/usr/bin/mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
-		artist=$(/usr/bin/cat /home/jiaxsun/music/npartist)
-		album=$(/usr/bin/cat /home/jiaxsun/music/npalbum)
+		mpc --format "[%artist%]" | head -n 1 > /home/jiaxsun/music/npartist
+		mpc --format "[%album%]" | head -n 1 > /home/jiaxsun/music/npalbum
+		artist=$(cat /home/jiaxsun/music/npartist)
+		album=$(cat /home/jiaxsun/music/npalbum)
 		current=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*' | head -n 1)
-		echo "$current    " "$music/$artist/$album/cover.png"
 		if [[ "$current" != "$music/$artist/$album/cover.png" ]]; then
 			pkill n30f
 			exec ahtwerk
@@ -26,18 +31,18 @@ then
 		sleep 1
 	done
 else
-	/home/jiaxsun/.local/bin/goimg.py "$album" "$artist"
+	#google for a square album art
+	goimg.py "$album" "$artist"
+	#use imagemagick to conver it to a 150x150 img
 	convert -thumbnail 150 "$music/$artist/$album/cover.*" "$music/$artist/$album/cover.png"
-	/home/jiaxsun/.local/bin/n30f -p -x 1770 -y 910 "$music/$artist/$album/cover.png"&
+	n30f -p -x 1765 -y 905 "$music/$artist/$album/cover.png"&
 	while true; do
-		/usr/bin/mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
-		/usr/bin/mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
+		mpc --format "[%artist%]" | head -n 1 > /home/jiaxsun/music/npartist
+		mpc --format "[%album%]" | head -n 1 > /home/jiaxsun/music/npalbum
 		artist=$(/usr/bin/cat /home/jiaxsun/music/npartist)
 		album=$(/usr/bin/cat /home/jiaxsun/music/npalbum)
 		current=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*' | head -n 1)
-		echo "$current    " "$music/$artist/$album/cover.png"
 		if [[ "$current" != "$music/$artist/$album/cover.png" ]]; then
-			echo "new song"
 			pkill n30f
 			exec ahtwerk
 		fi

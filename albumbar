@@ -1,0 +1,2 @@
+#!/bin/bash
+~/.local/bin/albuminfo | /bin/lemonbar -g "150x12+1765+187" -d -B '#424242' -F '#f6dedc' -f '-wiktorb-leggie-medium-*-*-*-12-*-*-*-*-*-*-*' 

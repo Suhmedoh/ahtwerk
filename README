@@ -14,3 +14,11 @@ basically will take the first google result for "artist name album name high qua
 
 it's not perfect, but it werks for me :)
 
+
+video of it in action(top right corner): https://a.pste.pw/uif.webm
+
+video with lemonbar additional information: https://a.pste.pw/EUd.webm
+
+in order to get it to work w/o lemonbar, just edit out the line that says "mediabar".  will upload my ugly hacky scripts for displaying media info soon.
+
+

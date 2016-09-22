@@ -1,0 +1,6 @@
+#!/bin/bash
+while true; do
+	title=$(mpc --format "[%title%]")
+	echo -e "$title"
+	sleep 1
+done

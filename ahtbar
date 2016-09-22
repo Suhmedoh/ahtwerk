@@ -1,0 +1,9 @@
+#!/bin/bash
+
+~/.local/bin/artistinfo | /bin/lemonbar -g "150x12+1765+175" -d -B '#424242' -F '#f6dedc' -f '-wiktorb-leggie-medium-*-*-*-12-*-*-*-*-*-*-*' 
+~/.local/bin/albuminfo | /bin/lemonbar -g "150x12+1765+187" -d -B '#424242' -F '#f6dedc' -f '-wiktorb-leggie-medium-*-*-*-12-*-*-*-*-*-*-*' 
+~/.local/bin/titleinfo | /bin/lemonbar -g "150x12+1765+199" -d -B '#424242' -F '#f6dedc' -f '-wiktorb-leggie-medium-*-*-*-12-*-*-*-*-*-*-*' 
+
+#150+20+
+
+#echo -e '0;1;0;0;160;160;;;;;/home/jiaxsun/music/albumart/ahtbg.png\n4;\n3;' | /usr/lib/w3m/w3mimgdisplay
