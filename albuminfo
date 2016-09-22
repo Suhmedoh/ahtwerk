@@ -1,6 +1,6 @@
 #!/bin/bash
 while true; do
-	album=$(mpc --format "[%album%]")
+	album=$(mpc --format "[%album%] | head -n 1 | tail -1")
 	echo -e "$album"
 	sleep 1
 done

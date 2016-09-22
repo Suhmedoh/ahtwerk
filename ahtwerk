@@ -2,50 +2,73 @@
 #ahtwerk, simple script to grab artwork based on onodera's... thing.
 #uses Sandi1995's gFind.py https://github.com/Sandi1995/urban-fiesta/blob/master/gFind.py
 #editted to work with my system and download only the necessary files, and to take input from the commandline
-#lots of help from LambdaComplex
+#lots of help from LambdaComplex <3
 music=/home/jiaxsun/music/albumart
-
 #grab the now playing information, write it into files(im sure there's a more efffient way to do this)
-mpc --format "[%artist%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npartist
-mpc --format "[%album%]" | /usr/bin/head -n 1 > /home/jiaxsun/music/npalbum
-artist=$(cat /home/jiaxsun/music/npartist)
-album=$(cat /home/jiaxsun/music/npalbum)
-mediabar
+artist=$(mpc --format "[%artist%]" | head -n 1)
+album=$(mpc --format "[%album%]" | head -n 1)
+escartist=$(sed 's/://' <<< $artist)
+escalbum=$(sed 's/://' <<< $album)
+#grep for the process that should be displaying album art
+procstring=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*')
+
 #check if a properly made cover art exists for the now playing
-if [[ -e "$music/$artist/$album/cover.png" ]];
+#echo "test2"
+if [[ -e "$music/$escartist/$escalbum/cover.png" ]];
 then
+	#echo "test3"
 	#use n30f to display already discovered cover art
-	n30f -p -x 1765 -y 905 "$music/$artist/$album/cover.png" &
+	n30f -p -x 1765 -y 905 "$music/$escartist/$escalbum/cover.png" &
 	#this loop repeatedly checks if the song has changed, and when it does, it kills n30f and restarts ahtwerk
-	while true;
-	do
-		mpc --format "[%artist%]" | head -n 1 > /home/jiaxsun/music/npartist
-		mpc --format "[%album%]" | head -n 1 > /home/jiaxsun/music/npalbum
-		artist=$(cat /home/jiaxsun/music/npartist)
-		album=$(cat /home/jiaxsun/music/npalbum)
-		current=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*' | head -n 1)
-		if [[ "$current" != "$music/$artist/$album/cover.png" ]]; then
-			pkill n30f
+	while true; do
+		echo "test first while"
+		artist=$(mpc --format "[%artist%]" | head -n 1)
+		album=$(mpc --format "[%album%]" | head -n 1)
+		escartist=$(sed 's/://' <<< $artist)
+		escalbum=$(sed 's/://' <<< $album)
+		process=$(ps aux | grep -o "[/]home/jiaxsun/music/albumart/.*/.*") 
+		if [[ "$process" == "$music/$escartist/$escalbum/cover.png" ]]; then
+			#sleep 1
+			echo "1 nowplaying matches n30f"
+		elif [[ "$process" == "$music/volume:.*" ]]; then
+			echo "1 .*"
+			#sleep 1
+		else
+			aapid=$(pgrep -n n30f)
+			echo "$process"
+			kill "$aapid"
+			echo "changing 1"
+			#sleep 1
 			exec ahtwerk
 		fi
-		sleep 1
 	done
 else
+	echo "test second while"
 	#google for a square album art
-	goimg.py "$album" "$artist"
+	goimg.py "$escalbum" "$escartist"
 	#use imagemagick to conver it to a 150x150 img
-	convert -thumbnail 150 "$music/$artist/$album/cover.*" "$music/$artist/$album/cover.png"
-	n30f -p -x 1765 -y 905 "$music/$artist/$album/cover.png"&
+	convert -thumbnail 150 "$music/$escartist/$escalbum/cover.*" "$music/$escartist/$escalbum/cover.png"
+	n30f -p -x 1765 -y 905 "$music/$escartist/$escalbum/cover.png"&
 	while true; do
-		mpc --format "[%artist%]" | head -n 1 > /home/jiaxsun/music/npartist
-		mpc --format "[%album%]" | head -n 1 > /home/jiaxsun/music/npalbum
-		artist=$(/usr/bin/cat /home/jiaxsun/music/npartist)
-		album=$(/usr/bin/cat /home/jiaxsun/music/npalbum)
-		current=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*' | head -n 1)
-		if [[ "$current" != "$music/$artist/$album/cover.png" ]]; then
-			pkill n30f
+		artist=$(mpc --format "[%artist%]" | head -n 1)
+		album=$(mpc --format "[%album%]" | head -n 1)
+		escartist=$(sed 's/://' <<< $artist)
+		escalbum=$(sed 's/://' <<< $album)
+		#sleep 1
+		process=$(ps aux | grep -o "[/]home/jiaxsun/music/albumart/.*/.*") 
+		if [[ "$process" == "$music/$escartist/$escalbum/cover.png" ]]; then
+			#sleep 1
+			echo "2 nowplaying matches n30f"
+		elif [[ "$process" == "$music/volume:.*" ]]; then
+			echo "2 .*"
+			#sleep 1
+		else
+			aapid=$(pgrep -n n30f)
+			echo "$process"
+			kill "$aapid"
+			echo "changing 2"
+			#sleep 1
 			exec ahtwerk
 		fi
-		sleep 1
 	done
 fi 

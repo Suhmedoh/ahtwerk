@@ -1,2 +1,2 @@
 #!/bin/bash
-~/.local/bin/titleinfo | /bin/lemonbar -g "150x12+1765+199" -d -B '#424242' -F '#f6dedc' -f '-wiktorb-leggie-medium-*-*-*-12-*-*-*-*-*-*-*' 
+~/.local/bin/titleinfo | /bin/lemonbar -g "160x12+1760+199" -d -B '#424242' -F '#f6dedc' -f '-wiktorb-leggie-medium-*-*-*-12-*-*-*-*-*-*-*' 

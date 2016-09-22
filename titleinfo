@@ -1,6 +1,6 @@
 #!/bin/bash
 while true; do
-	title=$(mpc --format "[%title%]")
+	title=$(mpc --format "%title% | head -n 1 | tail -1")
 	echo -e "$title"
 	sleep 1
 done

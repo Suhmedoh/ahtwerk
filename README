@@ -1,6 +1,7 @@
 This is a script I hacked together cause I wanted to display album art, but I don't have any local music on my computer.  It takes the currently playing song from mpd/mpc, searches google for a high quality image of the album art and downloads it to ~/music/artwork/$artist/$album, converts it to a thumbnail, and displays it using kyubiko's n30f.  It's not perfect, but it's fairly accurate for me, I'll try to update it and make the code cleaner.
 
 dependecies:
+lemonbar (to display track info)
 kyubiko's n30f https://github.com/sdhand/n30f
 imagemagick
 python2.7
@@ -21,4 +22,4 @@ video with lemonbar additional information: https://a.pste.pw/EUd.webm
 
 in order to get it to work w/o lemonbar, just edit out the line that says "mediabar".  will upload my ugly hacky scripts for displaying media info soon.
 
-
+I'm not claiming this is coded well, or efficient, or anything.  If it deletes system32 or w/e i take no responsibility
