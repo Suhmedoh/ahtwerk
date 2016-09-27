@@ -7,11 +7,8 @@ music=/home/jiaxsun/music/albumart
 #grab the now playing information, write it into files(im sure there's a more efffient way to do this)
 artist=$(mpc --format "[%artist%]" | head -n 1)
 album=$(mpc --format "[%album%]" | head -n 1)
-escartist=$(sed 's/://' <<< $artist)
-escalbum=$(sed 's/://' <<< $album)
-#grep for the process that should be displaying album art
-procstring=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*')
-
+escartist=$(sed 's/://' <<< "$artist")
+escalbum=$(sed 's/://' <<< "$album")
 #check if a properly made cover art exists for the now playing
 #echo "test2"
 
@@ -36,8 +33,8 @@ then
 		echo "test first while"
 		artist=$(mpc --format "[%artist%]" | head -n 1)
 		album=$(mpc --format "[%album%]" | head -n 1)
-		escartist=$(sed 's/://' <<< $artist)
-		escalbum=$(sed 's/://' <<< $album)
+		escartist=$(sed 's/://' <<< "$artist")
+		escalbum=$(sed 's/://' <<< "$album")
 		process=$(ps aux | grep -o "[/]home/jiaxsun/music/albumart/.*/.*") 
 		if [[ "$process" == "$music/$escartist/$escalbum/cover.png" ]]; then
 			#sleep 1
@@ -64,8 +61,8 @@ else
 	while true; do
 		artist=$(mpc --format "[%artist%]" | head -n 1)
 		album=$(mpc --format "[%album%]" | head -n 1)
-		escartist=$(sed 's/://' <<< $artist)
-		escalbum=$(sed 's/://' <<< $album)
+		escartist=$(sed 's/://' <<< "$artist")
+		escalbum=$(sed 's/://' <<< "$album")
 		#sleep 1
 		process=$(ps aux | grep -o "[/]home/jiaxsun/music/albumart/.*/.*") 
 		if [[ "$process" == "$music/$escartist/$escalbum/cover.png" ]]; then
