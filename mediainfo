@@ -1,6 +1,0 @@
-#!/bin/bash
-while true; do
-	artist=$(mpc --format "[%artist%]")
-	echo -e "$artist"
-
-done

@@ -1,4 +1,0 @@
-#!/bin/bash
-n30f -p -x 1760 -y 900 "/home/jiaxsun/music/albumart/ahtbg.png" &
-mediabar & 
-ahtwerk 
