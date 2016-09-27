@@ -14,6 +14,18 @@ procstring=$(ps aux | grep -o '/home/jiaxsun/music/albumart/.*')
 
 #check if a properly made cover art exists for the now playing
 #echo "test2"
+
+checker=$(mpc --format "[%album%]" | head -n 1 | tail -1)
+echo "test1"
+if [[ $checker == vol* ]];
+then
+	echo "pkill stuff"
+	pkill mediabar
+	pkill n30f
+	exec ahtwerk
+fi
+n30f -p -x 1760 -y 900 "/home/jiaxsun/music/albumart/ahtbg.png" &
+mediabar & 	
 if [[ -e "$music/$escartist/$escalbum/cover.png" ]];
 then
 	#echo "test3"

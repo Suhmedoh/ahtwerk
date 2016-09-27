@@ -1,7 +1,2 @@
 #!/bin/bash
-pkill artistinfo
-pkill artistbar
-pkill albuminfo
-pkill albumbar
-pkill titleinfo
-pkill titlebar
+pkill mediabar
