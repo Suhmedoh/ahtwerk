@@ -64,24 +64,21 @@ while i<len(search_keyword):
     j = 0
     while j<len(keywords):
         pure_keyword = keywords[j].replace(' ','%20')
-        url = 'https://www.google.com/search?q=' + search + pure_keyword + '&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
+        #https://www.google.com/search?as_st=y&tbm=isch&as_q=little+scream+love+as+a+weapon+album+art&as_epq=&as_oq=&as_eq=&imgsz=&imgar=&imgc=&imgcolor=&imgtype=&cr=&as_sitesearch=&safe=images&as_filetype=&as_rights=
+        url = 'https://www.google.com/search?q=' + search + pure_keyword + '&imgar=s&espv=2&biw=1366&bih=667&site=webhp&source=lnms&tbm=isch&sa=X&ei=XosDVaCXD8TasATItgE&ved=0CAcQ_AUoAg'
         raw_html =  (download_src(url))
-        #info = open('url.txt', 'a')      
-        #nfo.write(raw_html)        
-        #info.close()
         time.sleep(0.1)
         items = items + (get_all_items(raw_html))
         j = j + 1
-    #print ("Image Links = "+str(items))
     i = i+1
-
-    #info = open('database.txt', 'a')      
-    #info.write(str(i) + ': ' + str(search_keyword[i-1]) + ": " + str(items) + "\n\n\n")        
-    #info.close() 
 
 t1 = time.time()    
 total_time = t1-t0   
 
+
+################################################################################################################
+################################################################################################################
+#########################change /home/jiaxsun/music/albumart/ to where ever you want to store the artwork######################
 prodir='/home/jiaxsun/music/albumart/' + artist + '/' + album + '/'
 
 if not os.path.exists(prodir):
