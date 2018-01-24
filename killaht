@@ -1,5 +1,0 @@
-#!/bin/bash
-killmedia
-pkill ahtwerk
-pkill ahtbg
-pkill n30f

@@ -1,83 +1,25 @@
 #!/bin/bash
-#ahtwerk, simple script to grab artwork based on onodera's... thing.
-#uses Sandi1995's gFind.py https://github.com/Sandi1995/urban-fiesta/blob/master/gFind.py
-#editted to work with my system and download only the necessary files, and to take input from the commandline
-#lots of help from LambdaComplex <3
-music=/home/jiaxsun/music/albumart
-#grab the now playing information, write it into files(im sure there's a more efffient way to do this)
-artist=$(mpc --format "[%artist%]" | head -n 1)
-album=$(mpc --format "[%album%]" | head -n 1)
-escartist=$(sed 's/://' <<< "$artist")
-escalbum=$(sed 's/://' <<< "$album")
-#check if a properly made cover art exists for the now playing
-#echo "test2"
+#a rewrite of my nowplaying artwork display program using the hella useful ap by wandernauta afaik https://gist.github.com/wandernauta/6800547
 
-checker=$(mpc --format "[%album%]" | head -n 1 | tail -1)
-echo "test1"
-if [[ $checker == vol* ]];
-then
-	echo "pkill stuff"
-	pkill mediabar
-	pkill n30f
-	exec ahtwerk
-fi
-n30f -p -x 1760 -y 900 "/home/jiaxsun/music/albumart/ahtbg.png" &
-mediabar & 	
-if [[ -e "$music/$escartist/$escalbum/cover.png" ]];
-then
-	#echo "test3"
-	#use n30f to display already discovered cover art
-	n30f -p -x 1765 -y 905 "$music/$escartist/$escalbum/cover.png" &
-	#this loop repeatedly checks if the song has changed, and when it does, it kills n30f and restarts ahtwerk
-	while true; do
-		echo "test first while"
-		artist=$(mpc --format "[%artist%]" | head -n 1)
-		album=$(mpc --format "[%album%]" | head -n 1)
-		escartist=$(sed 's/://' <<< "$artist")
-		escalbum=$(sed 's/://' <<< "$album")
-		process=$(ps aux | grep -o "[/]home/jiaxsun/music/albumart/.*/.*") 
-		if [[ "$process" == "$music/$escartist/$escalbum/cover.png" ]]; then
-			#sleep 1
-			echo "1 nowplaying matches n30f"
-		elif [[ "$process" == "$music/volume:.*" ]]; then
-			echo "1 .*"
-			#sleep 1
-		else
-			aapid=$(pgrep -n n30f)
-			echo "$process"
-			kill "$aapid"
-			echo "changing 1"
-			#sleep 1
-			exec ahtwerk
-		fi
-	done
-else
-	echo "test second while"
-	#google for a square album art
-	goimg.py "$escalbum" "$escartist"
-	#use imagemagick to conver it to a 150x150 img
-	convert -thumbnail 150 "$music/$escartist/$escalbum/cover.*" "$music/$escartist/$escalbum/cover.png"
-	n30f -p -x 1765 -y 905 "$music/$escartist/$escalbum/cover.png"&
-	while true; do
-		artist=$(mpc --format "[%artist%]" | head -n 1)
-		album=$(mpc --format "[%album%]" | head -n 1)
-		escartist=$(sed 's/://' <<< "$artist")
-		escalbum=$(sed 's/://' <<< "$album")
-		#sleep 1
-		process=$(ps aux | grep -o "[/]home/jiaxsun/music/albumart/.*/.*") 
-		if [[ "$process" == "$music/$escartist/$escalbum/cover.png" ]]; then
-			#sleep 1
-			echo "2 nowplaying matches n30f"
-		elif [[ "$process" == "$music/volume:.*" ]]; then
-			echo "2 .*"
-			#sleep 1
-		else
-			aapid=$(pgrep -n n30f)
-			echo "$process"
-			kill "$aapid"
-			echo "changing 2"
-			#sleep 1
-			exec ahtwerk
-		fi
-	done
-fi 
+#get current track information
+oldInfo=$(sp current &)
+
+
+# at the start of this program, display the album art for the current song
+exec sp feh &
+
+# check if currently playing track is the same
+while true; do
+	sleep 1
+	currentInfo=$(sp current)
+
+	if [[ "$oldInfo" != "$currentInfo" ]];
+	then
+		oldInfo=$(sp current)
+		sppid=$(ps aux | grep "feh -g")
+		arr=($sppid)
+		echo ${arr[1]}
+		kill ${arr[1]}
+		ahtwerk
+	fi
+done

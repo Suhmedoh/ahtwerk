@@ -1,0 +1,13 @@
+#!/bin/bash
+# helper script for displaying album art in a mini terminal
+
+while true; do
+info=$(sp metadata | sed '1,3d;6,8d;10,11d' | sed -n -e 's/^.*|//p')
+	x=$info
+	readarray -t y <<<"$x"
+	echo -e "\n\n\e[33m${y[1]}\e[0m"
+	echo -e "\e[32m${y[0]}"
+	echo -e "\e[34m${y[2]}"
+
+done
+
