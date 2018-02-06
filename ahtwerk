@@ -1,8 +1,5 @@
-#!/bin/bash
-#a rewrite of my nowplaying artwork display program using the hella useful ap by wandernauta afaik https://gist.github.com/wandernauta/6800547
 
-#get current track information
-oldInfo=$(sp current &)
+#a rewrite of my nowplaying artwork display program using the hella useful ap by wandernauta afaik https://gist.github.com/wandernauta/6800547
 
 
 # at the start of this program, display the album art for the current song
@@ -10,16 +7,21 @@ exec sp feh &
 
 # check if currently playing track is the same
 while true; do
+	oldInfo=$(sp current)
 	sleep 1
 	currentInfo=$(sp current)
 
 	if [[ "$oldInfo" != "$currentInfo" ]];
 	then
+		echo "execute if statement"
+		echo "old info: $oldInfo"
+		echo "new info: $currentInfo"
 		oldInfo=$(sp current)
-		sppid=$(ps aux | grep "feh -g")
+		sppid=$(pgrep -f "feh -g")
 		arr=($sppid)
-		echo ${arr[1]}
-		kill ${arr[1]}
-		ahtwerk
+		echo ${arr[0]}
+		kill ${arr[0]}
+		wait
+		exec sp feh &
 	fi
 done
